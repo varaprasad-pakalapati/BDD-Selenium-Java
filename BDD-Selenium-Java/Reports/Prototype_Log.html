@@ -1,0 +1,367 @@
+<html>
+	<head>
+		<script type="text/javascript">
+		
+	function createAcceptanceTestNode(ExpectedDescription, ActualDescription, Status)	{
+		var lastAcceptanceTable = document.getElementsByTagName("table");
+		var AcceptanceTestNodes = lastAcceptanceTable[lastAcceptanceTable.length-1].getElementsByTagName("tr");
+		
+		var newAcceptanceRow = document.createElement("tr");
+		var newSerialNumber = document.createElement("td");
+		newSerialNumber.setAttribute("width","2%");
+		var newSerialNumberText = document.createTextNode(AcceptanceTestNodes.length);
+		newSerialNumber.appendChild(newSerialNumberText);
+		newSerialNumber.setAttribute("style","font-weight:normal");
+
+		var newExpectedDescription = document.createElement("td");
+		var newExpectedDescriptionText = document.createTextNode(ExpectedDescription);	
+		//newExpectedDescription.setAttribute("style","
+		newExpectedDescription.appendChild(newExpectedDescriptionText);
+		newExpectedDescription.setAttribute("style","font-weight:normal");
+		
+		var newActualDescription = document.createElement("td");
+		var newActualDescriptionText = document.createTextNode(ActualDescription);	
+		newActualDescription.appendChild(newActualDescriptionText);
+		newActualDescription.setAttribute("style","font-weight:normal");
+		
+		var newStatus = document.createElement("td");
+		var newStatusText = document.createTextNode(Status);	
+		newStatus.appendChild(newStatusText);
+		newStatus.setAttribute("style","font-weight:normal");
+		
+		newAcceptanceRow.appendChild(newSerialNumber);
+		newAcceptanceRow.appendChild(newExpectedDescription);
+		newAcceptanceRow.appendChild(newActualDescription);
+		
+		if(Status.toLowerCase()=="pass"){
+			newStatus.setAttribute("class","passcolor");
+		}
+		else {
+			newStatus.setAttribute("class","failcolor");
+		}
+		newAcceptanceRow.appendChild(newStatus);
+		newAcceptanceRow.setAttribute("style","font-family:cambria");
+		lastAcceptanceTable[lastAcceptanceTable.length-1].appendChild(newAcceptanceRow);
+	}
+
+		
+	function createSummaryTestNode(userStoryName){
+		var newTestNode = document.createElement("tr");
+		var newTestNameNode = document.createElement("td");
+		var newTestNameTextNode = document.createTextNode(" "+userStoryName);
+	
+		var newTestImageNode = document.createElement("img");
+		//var newTestStatusNode = document.createElement("td");
+
+		
+		newTestImageNode.setAttribute("src", "C:\\Users\\nettems\\Downloads\\expand.gif");
+		newTestImageNode.setAttribute("alt","[+]");
+		
+		
+		newTestNameNode.appendChild(newTestImageNode);
+		newTestNameNode.appendChild(newTestNameTextNode);
+		newTestNameNode.setAttribute("colspan",2);
+		
+		newTestNode.setAttribute("onclick", "clickAction(this)");
+		newTestNode.appendChild(newTestNameNode);
+		//newTestNode.appendChild(newTestStatusNode);
+		
+		var newAcceptanceNode = document.createElement("tr");
+		newAcceptanceNode.setAttribute("style","display:none");
+		
+		newAcceptanceTableNS = document.createElement("td");
+		newAcceptanceTableNS.setAttribute("colspan",2);
+		
+		var newAcceptanceStepTable=document.createElement("table");
+		newAcceptanceStepTable.setAttribute("width","100%");
+		newAcceptanceStepTable.setAttribute("align","left");
+		newAcceptanceStepTable.setAttribute("class","altrowstable");
+		newAcceptanceStepTable.setAttribute("name","acceptanceTable");
+		newAcceptanceStepTable.setAttribute("id","alternatecolor");
+	
+		var newAcceptanceStepNS = document.createElement("tr");
+		var newAcceptanceStep = document.createElement("th");
+		newAcceptanceStep.setAttribute("width","2%");
+		var newAcceptanceStepText = document.createTextNode("SL.No");
+		var newAcceptanceExpected = document.createElement("th");
+		newAcceptanceExpected.setAttribute("width","43%");
+		var newAcceptanceExpectedText = document.createTextNode("EXPECTED DESCRIPTION");
+		var newAcceptanceActual = document.createElement("th");
+		newAcceptanceActual.setAttribute("width","43%");
+		var newAcceptanceActualText = document.createTextNode("ACTUAL DESCRIPTION");
+		var newAcceptanceStatus = document.createElement("th");
+		var newAcceptanceStatusText = document.createTextNode("STATUS");
+
+		newAcceptanceStatus.appendChild(newAcceptanceStatusText);
+		newAcceptanceStep.appendChild(newAcceptanceStepText);
+		newAcceptanceActual.appendChild(newAcceptanceActualText);
+		newAcceptanceExpected.appendChild(newAcceptanceExpectedText);
+		
+		newAcceptanceStepNS.appendChild(newAcceptanceStep);
+		newAcceptanceStepNS.appendChild(newAcceptanceExpected);
+		newAcceptanceStepNS.appendChild(newAcceptanceActual);
+		newAcceptanceStepNS.appendChild(newAcceptanceStatus);	
+
+		newAcceptanceStepTable.appendChild(newAcceptanceStepNS);		
+		
+		newAcceptanceTableNS.appendChild(newAcceptanceStepTable);
+		newAcceptanceNode.appendChild(newAcceptanceTableNS);
+		
+		var oSumTable = document.getElementById("summaryTable");
+		oSumTable.appendChild(newTestNode);		
+		oSumTable.appendChild(newAcceptanceNode);	
+
+	}
+	
+	function updateStatus(){
+		var AcceptanceTable = document.getElementsByTagName("table");
+
+		for(tables=0;tables<AcceptanceTable.length;tables++){
+			var finalStatus="FAIL";
+			var finalClass="failcolor";
+			if(AcceptanceTable[tables].getAttribute("name")=="acceptanceTable"){
+			var AcceptanceDetailsRow = AcceptanceTable[tables].getElementsByTagName("tr");
+			for(row=1;row<AcceptanceDetailsRow.length;row++){
+				var AcceptanceDetailsStatus = AcceptanceDetailsRow[row].getElementsByTagName("td");
+				if(AcceptanceDetailsStatus.length>2){
+					if((AcceptanceDetailsStatus[AcceptanceDetailsStatus.length-1].firstChild.nodeValue).toLowerCase()=="pass")						{
+						finalStatus="PASS";
+						finalClass="passcolor";
+					}
+					else
+					if((AcceptanceDetailsStatus[AcceptanceDetailsStatus.length-1].firstChild.nodeValue).toLowerCase()=="fail")						{
+						finalStatus="FAIL";
+						finalClass="failcolor";
+						break;
+					}
+				}
+			}
+		var finalStatusTextNode = AcceptanceTable[tables].parentElement.parentElement.previousSibling.lastChild;
+		var finalStatusTextNodeText=document.createTextNode(finalStatus);
+		finalStatusTextNode.appendChild(finalStatusTextNodeText);
+		finalStatusTextNode.setAttribute("class",finalClass);
+		}
+	  }
+	}
+		
+	function clickAllAction(row){
+		var tables=document.getElementsByName("acceptanceTable");
+		var imgObj = row.getElementsByTagName("img");
+		if(imgObj[0].getAttribute("src").toLowerCase().indexOf("expand.gif")>0){
+			for(tblItr=0;tblItr<tables.length;tblItr++){
+				var rowObj = tables[tblItr].parentElement.parentElement;
+				rowObj.style.display="table-row";
+				altDisplay(rowObj,true);
+			}
+			imgObj[0].setAttribute("src","C:\\Users\\nettems\\Downloads\\collapse.gif");
+			imgObj[0].setAttribute("alt","[--]");
+		}
+		else{
+			for(tblItr=0;tblItr<tables.length;tblItr++){
+				var rowObj = tables[tblItr].parentElement.parentElement;
+				rowObj.style.display="none";
+				altDisplay(rowObj,false);
+			}
+			imgObj[0].setAttribute("src","C:\\Users\\nettems\\Downloads\\expand.gif");
+			imgObj[0].setAttribute("alt","[+]");
+		}
+	}
+		
+	function clickAction(row){
+		var obj=row.nextSibling;
+		altDisplay(obj,obj.style.display=="none");
+	}
+	
+	function altDisplay(obj,displayFlag){
+		if((navigator.userAgent.toLowerCase()).indexOf("msie")>-1){
+			var img=obj.previousSibling.getElementsByTagName("img")[0];
+		}
+		else {
+			var img=obj.previousSibling.getElementsByTagName("img")[0];
+
+		}
+		if(displayFlag){
+			obj.style.display="table-row";
+			img.setAttribute("src","C:\\Users\\nettems\\Downloads\\collapse.gif");
+			img.setAttribute("alt","[--]");			
+			}
+		else{
+			obj.style.display="none"
+			img.setAttribute("src","C:\\Users\\nettems\\Downloads\\expand.gif");
+			img.setAttribute("alt","[+]");
+		}
+	}
+	
+	function altRows(table){
+		var rows = table.getElementsByTagName("tr"); 
+		for(i = 1; i < rows.length; i++){
+			var cols = rows[i].getElementsByTagName("td");
+			
+			if(i % 2 == 0){
+				rows[i].className = "evenrowcolor";
+			}else{
+				rows[i].className = "oddrowcolor";
+			}   
+			
+			if(cols.length>2){
+				if(cols[1].textContent=="pass"){
+					cols[1].className="passcolor";
+				}
+				if(cols[1].textContent=="fail"){
+					cols[1].className="failcolor";
+				}
+			}
+		}
+	}
+	
+	function drawGraph(){
+		var cnv = document.getElementById("canvas");
+		var ctx = cnv.getContext("2d");
+		var summaryTable = document.getElementById("summaryTable");
+		var tableRows = summaryTable.rows;
+		var passCount=0;
+		var failCount=0;
+		for(i=1;i<tableRows.length;i=i+2) {
+			var tempVar = (tableRows[i].cells[1].textContent.toLowerCase()=="pass")?++passCount:++failCount;
+		}
+		var countDetails=document.getElementById("countDetails");
+		countDetails.style.display="table";
+		countDetails.rows[1].cells[1].innerHTML=passCount;
+		countDetails.rows[2].cells[1].innerHTML=failCount;
+		var colors = ["#32CD32", "#FF4500"];
+		var center = [cnv.width / 2, cnv.height / 2];
+		var radius = Math.min(cnv.width, cnv.height) / 2;
+		var lastPosition = 0, total = passCount+failCount;
+		var data=[passCount,failCount];
+		if(total!=0)
+		for (var i = 0; i < data.length; i++) {
+			ctx.fillStyle = colors[i];
+			ctx.beginPath();
+			ctx.moveTo(center[0],center[1]);
+			ctx.arc(center[0],center[1],radius,lastPosition,lastPosition+(Math.PI*2*(data[i]/total)),false);
+			ctx.lineTo(center[0],center[1]);
+			ctx.fill();
+			lastPosition += Math.PI*2*(data[i]/total);
+		}
+	}
+
+window.onload=function(){
+//Insert Calls
+	var tables = document.getElementsByTagName("table");
+	for(itr=0; itr<tables.length;itr++){
+		altRows(tables[itr]);
+	}
+	drawGraph();
+}
+</script>
+
+<style type="text/css">
+
+table.summarytable {
+	font-family: cambria;
+	font-size:16px;
+	color:#333333;
+	border-width: 2px;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+}
+table.altrowstable, table.aligntable, table.executiondetails,table.countdetails{
+	font-family: cambria;
+	font-size:14px;
+	color:#333333;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+}
+table.altrowstable th,table.aligntable th,table.executiondetails th,table.summarytable th,table.countdetails th {
+	border-width: 1px;
+	text-align:left;
+	padding: 7px;
+	font-weight:bold;
+	border-style: solid;
+	border-color: #a9c6c9;
+	background-color:#ADD8E6
+}
+table.altrowstable td,table.aligntable td,table.executiondetails td,table.summarytable td, table.countdetails td{
+	border-width: 1px;
+	padding: 4px;
+	font-weight:bold;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+
+.oddrowcolor{
+	background-color:#d4e3e5;
+}
+.evenrowcolor{
+	background-color:#c3dde0;
+}
+
+.failcolor{
+	color:#FF4500;
+}
+
+.passcolor{
+	color:#32CD32;	
+}
+</style>
+</head>
+<body>
+
+</br>
+<h2 align = "center"> <u> DETAILED LOG REPORT </u> </h2>
+</br>
+<!--<table width="90%" align="center">
+<tr><td width="50%">
+<table align="center" width=100% class="executiondetails" id="executionDetails">
+	<tr>
+		<th colspan=2>EXECUTION SUMMARY </th>
+	</tr>
+	<tr>
+		<td width=40%>Application: </td><td>value</td>
+	</tr>
+	<tr>
+		<td width=40%>Hostname: </td><td>value</td>
+	</tr>
+	<tr>
+		<td width=40%>Environment: </td><td>value</td>
+	</tr>
+	<tr>
+		<td width=40%>Execution Type:</td><td>value</td>
+	</tr>
+	<tr>
+		<td width=40%>Execution Start Time:</td><td>value</td>
+	</tr>
+	<tr>
+		<td width=40%>Execution End Time: </td><td>value</td>
+	</tr>
+	<tr>
+		<td width=40%>Total Execution Time:</td><td>value</td>
+	</tr>
+</table>
+</td>
+<td width="25%">
+<div style="margin-left:10%">
+<canvas id="canvas" width="400" height="200" align="center"></canvas>
+</div>
+</td>
+<td>
+</br></br></br></br></br></br>
+<table style="display:none" width="100%" class="countdetails" id="countDetails">
+<tr align="center"><th colspan=2>EXECUTION STATUS</th></tr>
+<tr><td style="color:#32CD32">Pass:</td><td></td></tr>
+<tr><td style="color:#FF4500">Fail:</td><td></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</br>
+</br>-->
+
+	<table width=90% align="center" class="summarytable" id="summaryTable">
+		<tr onclick=clickAllAction(this)><th width=90%><img src="C:\\Users\\nettems\\Downloads\\expand.gif" alt="[+]"></img> TEST SCRIPT NAME</th></tr>
+	</table>
+</td></tr> </table>
+</body>
+</html>
