@@ -6,14 +6,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class LogFile {
-	Config config;
 	
 	public static Path reportFilePath;
     private Path logFilePath;
@@ -23,15 +19,20 @@ public class LogFile {
 		String timeStamp = Utilities.getDateTime();
 		
 		Path parentResultFolderName = Paths.get(System.getProperty("user.dir") + "\\Reports");
-		String pathName = parentResultFolderName + "\\" + config.getInstance().getApplicationName();
+		String pathName = parentResultFolderName + "\\" + Config.getInstance().getApplicationName();
 		String subResultsFolderName = pathName + "_" + timeStamp;
 		
 		Path orgLogFilePath = Paths.get(parentResultFolderName + "\\Prototype_Log.html");
 		Path orgReportFilePath = Paths.get(parentResultFolderName + "\\Prototype_Report.html");
-	
+		
 		boolean directory = new File(subResultsFolderName).mkdirs();
-		logFilePath = Paths.get(subResultsFolderName + "\\LogReport.html");
-	    reportFilePath = Paths.get(subResultsFolderName + "\\SummaryReport.html");
+		if(directory) {
+			logFilePath = Paths.get(subResultsFolderName + "\\LogReport.html");
+		    reportFilePath = Paths.get(subResultsFolderName + "\\SummaryReport.html");
+		}
+		else {
+			Logger.reportNote("Unable to create results folder.", Status.Fail);
+		}
 	    
 	    try {
 			List<String> reportContent = Files.readAllLines(orgReportFilePath, Charset.defaultCharset());

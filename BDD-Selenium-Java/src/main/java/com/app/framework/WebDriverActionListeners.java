@@ -11,15 +11,13 @@ public class WebDriverActionListeners extends AbstractWebDriverEventListener {
 
 	private WebDriver driver;
 	WebDriverExtensions driverExtensions;
-	Logger logger;
-	Config config;
 	
 	public WebDriverActionListeners() {
-		logger.reportSummaryDetails("start time", Calendar.getInstance().getTime().toString());
-        logger.reportSummaryDetails("application name", config.getInstance().getApplicationName().toUpperCase());
-        logger.reportSummaryDetails("environment", config.getInstance().getEnvironment().toUpperCase());
-        logger.reportSummaryDetails("host name", "LOCALHOST");
-        logger.reportSummaryDetails("execution type", config.getInstance().getExecutionType().toUpperCase());
+		Logger.reportSummaryDetails("start time", Calendar.getInstance().getTime().toString());
+        Logger.reportSummaryDetails("application name", Config.getInstance().getApplicationName().toUpperCase());
+        Logger.reportSummaryDetails("environment", Config.getInstance().getEnvironment().toUpperCase());
+        Logger.reportSummaryDetails("host name", "LOCALHOST");
+        Logger.reportSummaryDetails("execution type", Config.getInstance().getExecutionType().toUpperCase());
 	}
 		
 	public WebDriverActionListeners(WebDriver driver) {
@@ -44,7 +42,7 @@ public class WebDriverActionListeners extends AbstractWebDriverEventListener {
         }
         
         String actualDescription = "Successfully updated the field '" + element + "' value to '" + currentValue;
-        logger.reportEvent(expectedDescription, actualDescription, Status.Pass);
+        Logger.reportEvent(expectedDescription, actualDescription, Status.Pass);
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class WebDriverActionListeners extends AbstractWebDriverEventListener {
 		super.afterClickOn(element, driver);
 		String expectedDescription = "Click on the element '"+element +"'";
         String actualDescription = "Successfully clicked on the element '" +  element + "'";
-        logger.reportEvent(expectedDescription, actualDescription, Status.Pass);
+        Logger.reportEvent(expectedDescription, actualDescription, Status.Pass);
 		driverExtensions.sync();
 		
 	}
@@ -64,7 +62,7 @@ public class WebDriverActionListeners extends AbstractWebDriverEventListener {
 		super.afterNavigateTo(url, driver);
 		String expectedDescription = "Navigate to the URL + '" + url + "'";
         String actualDescription = "Successfully navigated to the URL: '" + url + "'";
-        logger.reportEvent(expectedDescription, actualDescription, Status.Pass);
+        Logger.reportEvent(expectedDescription, actualDescription, Status.Pass);
 		driverExtensions.sync();
 	}
 	

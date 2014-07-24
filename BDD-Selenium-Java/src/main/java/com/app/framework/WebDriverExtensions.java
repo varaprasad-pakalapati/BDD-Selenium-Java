@@ -25,6 +25,7 @@ public class WebDriverExtensions {
         }
         catch (Exception e)
         {
+        	//TODO
         }
 
         WebDriverWait driverWait = new WebDriverWait(driver_, 5);

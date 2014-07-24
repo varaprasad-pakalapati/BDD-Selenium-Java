@@ -20,7 +20,6 @@ import javax.mail.internet.MimeMultipart;
 public class SendMail {
 	
 	private Properties props;
-	private Message message;
 	private Session session;
 	Config config;
 	
@@ -51,7 +50,7 @@ public class SendMail {
         try {
         	Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("varaprasad.pakalapati@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(config.getInstance().getDistributionList()));
+			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(Config.getInstance().getDistributionList()));
 			message.setSubject(testDetails);
 			message.setText("Dear Mail Crawler," +
 					"\n\n No spam to my email, please!");
